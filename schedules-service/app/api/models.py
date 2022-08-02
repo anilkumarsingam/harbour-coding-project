@@ -1,13 +1,23 @@
 import uuid
 from typing import Optional, List
 from pydantic import BaseModel, Field
+from enum import Enum
 
 '''class Interval(BaseModel):
     start: str = Field(...)
     end: str = Field(...)'''
 
+class Day(str, Enum):
+    MONDAY = 'MONDAY'
+    TUESDAY = 'TUESDAY'
+    WEDNESSDAY = 'WEDNESSDAY'
+    THURSDAY = 'THURSDAY'
+    FRIDAY = 'FRIDAY'
+    SATURDAY = 'SATURDAY'
+    SUNDAY = 'SUNDAY'
+
 class Rule(BaseModel):
-    day: str = Field(...)
+    day: Day = Field(...)
     intervals : List[List[str]] = Field(...)
 
 class Schedule(BaseModel):

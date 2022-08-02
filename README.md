@@ -45,4 +45,6 @@ After submission, we will conduct a 30 to 60 minute code review in person. We wi
   and http://localhost:8080/api/v1/user/docs for user service docs
 
 ## Also deployed on an ec2 instance
-- Head over to http://3.80.71.250:8080/api/v1/schedules/docs http://3.80.71.250:8080/api/v1/user/docs
+- Head over to 
+- http://3.80.71.250:8080/api/v1/schedules/docs 
+- http://3.80.71.250:8080/api/v1/user/docs

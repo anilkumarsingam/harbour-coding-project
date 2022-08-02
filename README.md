@@ -46,5 +46,5 @@ After submission, we will conduct a 30 to 60 minute code review in person. We wi
 
 ## Also deployed on an ec2 instance
 - Head over to 
-- http://3.80.71.250:8080/api/v1/schedules/docs 
-- http://3.80.71.250:8080/api/v1/user/docs
+- http://52.204.250.207:8080/api/v1/schedules/docs 
+- http://52.204.250.207:8080/api/v1/user/docs

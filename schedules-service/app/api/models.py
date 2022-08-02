@@ -2,13 +2,13 @@ import uuid
 from typing import Optional, List
 from pydantic import BaseModel, Field
 
-class Interval(BaseModel):
+'''class Interval(BaseModel):
     start: str = Field(...)
-    end: str = Field(...)
+    end: str = Field(...)'''
 
 class Rule(BaseModel):
     day: str = Field(...)
-    intervals : List[Interval] = Field(...)
+    intervals : List[List[str]] = Field(...)
 
 class Schedule(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
@@ -47,12 +47,12 @@ class ScheduleUpdate(BaseModel):
                                 "type":"day",
                                 "intervals":[
                                         {
-                                                "start":"11:00",
-                                                "end":"19:00"
+                                                "1100",
+                                                "1900"
                                         },
                                         {
-                                                "start":"20:00",
-                                                "end":"21:00"
+                                                "2000",
+                                                "2100"
                                         }
                                 ],
                                 "day":"MONDAY"
@@ -61,8 +61,8 @@ class ScheduleUpdate(BaseModel):
                                 "type":"day",
                                 "intervals":[
                                         {
-                                                "start":"09:00",
-                                                "end":"17:00"
+                                                "0900",
+                                                "1700"
                                         }
                                 ],
                                 "day":"FRIDAY"

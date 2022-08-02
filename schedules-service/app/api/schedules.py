@@ -3,6 +3,7 @@ from fastapi.encoders import jsonable_encoder
 from typing import List
 
 from app.api.models import Schedule, ScheduleUpdate
+from app.api.utils import find_overlap
 
 schedules = APIRouter()
 
@@ -17,9 +18,9 @@ async def create_schedule(request: Request, schedule: Schedule = Body(...)):
     return created_schedule
 
 
-@schedules.get("/", response_description="List all schedules of user", response_model=List[Schedule])
-async def list_schedules(request: Request, user_id: int = None):
-    query = { "owner_id": user_id }
+@schedules.get("/", response_description="List all schedules of owner", response_model=List[Schedule])
+async def list_schedules(request: Request, owner_id: int = None):
+    query = { "owner_id": owner_id }
     schedules = list(request.app.database["schedules"].find(query, limit=100))
     return schedules
 
@@ -61,3 +62,32 @@ async def delete_schedule(id: str, request: Request, response: Response):
         return response
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Schedule with ID {id} not found")
+
+
+@schedules.get("/overlap/", response_description="Overlap betweeen schedules")
+async def get_schedules_overlap(request: Request, owner_schedule_id: str = None, guest_schedule_id: str = None):
+    owner_schedule = request.app.database["schedules"].find_one({"_id": owner_schedule_id})
+    guest_schedule = request.app.database["schedules"].find_one({"_id": guest_schedule_id})
+
+    if owner_schedule is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Schedule with ID {owner_schedule_id} not found")
+
+    if guest_schedule is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"Schedule with ID {guest_schedule_id} not found")
+
+    overlap_rules = []
+    for owner_rule in owner_schedule["rules"]:
+        for guest_rule in guest_schedule["rules"]:
+            if owner_rule["day"] == guest_rule["day"]:
+                overlap_rules.append({
+                    "day" : owner_rule["day"],
+                    "intervals" : find_overlap(owner_rule["intervals"], guest_rule["intervals"])
+
+                }) 
+
+    overlap = {
+        "rules" : overlap_rules,
+        "timezone" : owner_schedule["timezone"]
+    }
+
+    return overlap
